@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media.Imaging;
+using System.Windows.Shapes;
 using VideCaptureLib;
 
 namespace StopMotionWpf
@@ -25,6 +28,8 @@ namespace StopMotionWpf
         int curImageOverLayInd = -1;
 
         System.Windows.Controls.Image[] prevImageControls = new System.Windows.Controls.Image[MAXIMGS];
+        Grid[] prevGridControls = new Grid[MAXIMGS];
+        Border[] prevImageBorders= new Border[MAXIMGS];
 
         public MainWindow()
         {
@@ -35,7 +40,17 @@ namespace StopMotionWpf
             for(int i = 0; i < MAXIMGS; i++)
             {
                 prevImageControls[i] = new System.Windows.Controls.Image();
-                panImages.Children.Add(prevImageControls[i]);
+                Grid grid = new Grid();
+                prevGridControls[i] = grid;
+                Border border = new Border();
+                border.Child = prevImageControls[i];
+                grid.Children.Add(border);
+                prevImageBorders[i] = border;
+                border.BorderThickness = new Thickness(0);
+                border.Visibility= Visibility.Visible;
+                border.BorderBrush = System.Windows.Media.Brushes.Yellow;
+                //border.Background = System.Windows.Media.Brushes.Yellow;
+                panImages.Children.Add(grid);
             }
 
             loadOldFiles();
@@ -167,11 +182,28 @@ namespace StopMotionWpf
 
         void showOverLay()
         {
-            if (curImageOverLayInd < 0 && curImageOverLayInd < prevImages.Count)
+            if (curImageOverLayInd >= 0 && curImageOverLayInd < prevImages.Count)
             {
                 var data = prevImages[curImageOverLayInd];
                 if (data == null) return;
                 imgOverlay.Source = byteToDspImg(data);
+            }
+        }
+
+
+        void hightLightSelectedPrevImage()
+        {
+            foreach( var border in prevImageBorders)
+            {
+                if (border == null) continue;
+                border.BorderThickness = new Thickness(0);
+            }
+
+            if (curImageOverLayInd >= 0)
+            {
+                var border = prevImageBorders[curImageOverLayInd];
+                if (border == null) return;
+                border.BorderThickness = new Thickness(3);
             }
         }
         private void btnPrevOverlay_Click(object sender, RoutedEventArgs e)
@@ -180,10 +212,11 @@ namespace StopMotionWpf
             if (curImageOverLayInd < 0)
             {
                 curImageOverLayInd = 0;
+                btnPrevOverlay.IsEnabled = false;                
             }
-            btnPrevOverlay.IsEnabled = false;
             btnNextOverlay.IsEnabled = true;
             showOverLay();
+            hightLightSelectedPrevImage();
         }
 
         private void btnNextOverlay_Click(object sender, RoutedEventArgs e)
@@ -191,11 +224,12 @@ namespace StopMotionWpf
             curImageOverLayInd++;
             if (curImageOverLayInd >= prevImages.Count || prevImages[curImageOverLayInd] == null)
             {
-                curImageOverLayInd = 0;
+                curImageOverLayInd--;
                 btnPrevOverlay.IsEnabled = true;
                 btnNextOverlay.IsEnabled = false;
             }
             showOverLay();
+            hightLightSelectedPrevImage();
         }
 
         private void txtMainImageAlpha_KeyUp(object sender, System.Windows.Input.KeyEventArgs e)

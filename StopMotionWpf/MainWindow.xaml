@@ -29,10 +29,13 @@
             <TextBox x:Name="txtSaveLocation" Margin="2,3,2,3">savedImages</TextBox>
         </StackPanel>
 
-        <Image x:Name="imgMain"></Image>
         <Image x:Name="imgOverlay"></Image>
-        <StackPanel Grid.Column="1" x:Name="panImages" CanVerticallyScroll="True">
+        <Image x:Name="imgMain"></Image>
+
+        <ScrollViewer Grid.Column="1">
+        <StackPanel  x:Name="panImages" CanVerticallyScroll="True">
             
         </StackPanel>
+        </ScrollViewer>
     </Grid>
 </Window>
