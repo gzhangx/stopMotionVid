@@ -7,6 +7,29 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="30"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="200"/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal">
+            <Button x:Name="btnStart" Click="btnStart_Click" Width="50" Margin="2,3,2,3" >Start</Button>
+            <Button x:Name="btnStop" Click="btnStop_Click"  Width="50" Margin="2,3,2,3">Stop</Button>
+            <Button x:Name="btnCapture" Click="btnCapture_Click"  Width="100" Margin="2,3,2,3">Capture</Button>
+        </StackPanel>
 
+        <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal">
+            <Button x:Name="btnPrevOverlay" Click="btnPrevOverlay_Click" Margin="2,3,2,3">Prev</Button>
+            <Button x:Name="btnNextOverlay" Click="btnNextOverlay_Click" Margin="2,3,2,3">Next</Button>
+            <TextBox x:Name="txtSaveLocation" Margin="2,3,2,3">savedImages</TextBox>
+        </StackPanel>
+
+        <Image x:Name="imgMain"></Image>
+        <StackPanel Grid.Column="1" x:Name="panImages" CanVerticallyScroll="True">
+            
+        </StackPanel>
     </Grid>
 </Window>

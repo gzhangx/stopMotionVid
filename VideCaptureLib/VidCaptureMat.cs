@@ -3,13 +3,13 @@ using System;
 
 namespace VideCaptureLib
 {
-    public class VidCapture
+    public class VidCaptureMat : IDisposable
     {
         private object vidLock = new object();
         protected VideoCapture vid;
         public int W { get; protected set; }
         public int H { get; protected set; }
-        public VidCapture(Action<Mat> grabAction, int ind = 0)
+        public VidCaptureMat(Action<Mat> grabAction, int ind = 0)
         {
             //DsDevice[] _SystemCamereas = DsDevice.GetDevicesOfCat(FilterCategory.VideoInputDevice);
             //WebCams = new Video_Device[_SystemCamereas.Length];
@@ -34,8 +34,28 @@ namespace VideCaptureLib
                         grabAction(mat);
                     }
                 }
-            };
+            };            
+        }
+
+        public void Start()
+        {
             vid.Start();
+        }
+        public void Stop()
+        {
+            vid.Stop();
+        }
+
+        public void Dispose()
+        {
+            if (vid != null)
+            {
+                lock (vidLock)
+                {
+                    vid.Stop();
+                    vid.Dispose();
+                }
+            }
         }
     }
 
