@@ -1,3 +1,5 @@
 .vs
 StopMotionWpf/bin
 StopMotionWpf/obj
+VideCaptureLib/obj
+VideCaptureLib/bin
