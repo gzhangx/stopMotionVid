@@ -19,6 +19,8 @@
             <Button x:Name="btnStart" Click="btnStart_Click" Width="50" Margin="2,3,2,3" >Start</Button>
             <Button x:Name="btnStop" Click="btnStop_Click"  Width="50" Margin="2,3,2,3">Stop</Button>
             <Button x:Name="btnCapture" Click="btnCapture_Click"  Width="100" Margin="2,3,2,3">Capture</Button>
+            <TextBlock  Margin="2,3,2,3">Image Alpha</TextBlock>
+            <TextBox x:Name="txtMainImageAlpha" Margin="2,3,2,3" KeyUp="txtMainImageAlpha_KeyUp">1</TextBox>
         </StackPanel>
 
         <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal">
@@ -28,6 +30,7 @@
         </StackPanel>
 
         <Image x:Name="imgMain"></Image>
+        <Image x:Name="imgOverlay"></Image>
         <StackPanel Grid.Column="1" x:Name="panImages" CanVerticallyScroll="True">
             
         </StackPanel>
