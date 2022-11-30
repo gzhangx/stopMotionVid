@@ -14,6 +14,8 @@ namespace VideCaptureLib
             //DsDevice[] _SystemCamereas = DsDevice.GetDevicesOfCat(FilterCategory.VideoInputDevice);
             //WebCams = new Video_Device[_SystemCamereas.Length];
             vid = new VideoCapture(ind);
+            vid.Set(Emgu.CV.CvEnum.CapProp.FrameWidth, 1920);
+            vid.Set(Emgu.CV.CvEnum.CapProp.FrameHeight, 1080);
             W = vid.Width; //(int)vid.GetCaptureProperty(Emgu.CV.CvEnum.CapProp.FrameWidth);
             H = vid.Height; //(int)vid.GetCaptureProperty(Emgu.CV.CvEnum.CapProp.FrameHeight);
             vid.ImageGrabbed += (sender, e) =>

@@ -18,7 +18,7 @@ namespace StopMotionWpf
     /// </summary>
     public partial class MainWindow : Window
     {
-        VidCaptureBmpAry capture;
+        readonly VidCaptureBmpAry capture;
         static byte[] emptyFrame = new byte[0];
         byte[] curFrame = emptyFrame;
         int curImageSaveIndex = 1;
@@ -31,13 +31,16 @@ namespace StopMotionWpf
         Grid[] prevGridControls = new Grid[MAXIMGS];
         Border[] prevImageBorders= new Border[MAXIMGS];
 
+        private string? saveLocation = null;
         public MainWindow()
         {
-            InitializeComponent();
+            InitializeComponent();            
+
             this.Closing += MainWindow_Closing;
             capture = new VidCaptureBmpAry(this.onVideFrame);
-            
-            for(int i = 0; i < MAXIMGS; i++)
+            if (!ensureDir()) return;
+
+            for (int i = 0; i < MAXIMGS; i++)
             {
                 prevImageControls[i] = new System.Windows.Controls.Image();
                 Grid grid = new Grid();
@@ -95,21 +98,27 @@ namespace StopMotionWpf
             return image;
         }
 
-        private void btnCapture_Click(object sender, RoutedEventArgs e)
+        private bool ensureDir()
         {
-            var saveLocation = txtSaveLocation.Text;
             try
             {
+                saveLocation = txtSaveLocation.Text;
+
                 if (!File.Exists(saveLocation))
                 {
                     Directory.CreateDirectory(saveLocation);
                 }
+                return true;
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Can't create dir " + saveLocation + ex.Message);
-                return;
+                return false;
             }
+        }
+        private void btnCapture_Click(object sender, RoutedEventArgs e)
+        {
+            if (!ensureDir()) return;
             if (!Directory.Exists(saveLocation))
             {
                 MessageBox.Show("not a dir " + saveLocation);
@@ -171,7 +180,7 @@ namespace StopMotionWpf
                         curImageOverLayInd = i;
                         prevImages.Add(File.ReadAllBytes(f.fileName));
                         if (maxInd < intVal) maxInd = intVal;
-                    } catch(Exception ex)
+                    } catch
                     {
                         Console.WriteLine("Error parse file " + f.fileName);
                     }
